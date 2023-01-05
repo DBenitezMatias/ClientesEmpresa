@@ -41,8 +41,8 @@ private void desplazarUnaPosicionHaciaIzquierda(int indice) {
 	
 }
 public Cliente get() {
-	Cliente[] cliente=null;
-	return cliente;
+	Cliente[] cliente = null;
+	return cliente[0];
 }
 public int getCapacidad(){
 	

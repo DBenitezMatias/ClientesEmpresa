@@ -1,5 +1,6 @@
 package org.iesalandalus.programacion.clientesempresa.modelo.dominio;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ public class Cliente {
 	private String dni;
 	private String correo;
 	private String telefono;
-	private Date fechaNacimiento;
+	private LocalDate fechaNacimiento;
 	
 	public Cliente(Cliente cliente) {
 		
@@ -50,10 +51,10 @@ public class Cliente {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-	public Date getFechaNacimiento() {
+	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
-	public void setFechaNacimiento(Date fechaNacimiento) {
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 	@Override

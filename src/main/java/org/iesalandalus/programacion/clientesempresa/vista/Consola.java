@@ -1,7 +1,24 @@
 package org.iesalandalus.programacion.clientesempresa.vista;
 
+import org.iesalandalus.programacion.clientesempresa.modelo.dominio.Cliente;
+import org.iesalandalus.programacion.utilidades.Entrada;
+
 public class Consola {
+	public void mostrarMenu() {
+		
+		System.out.println("ELIGE UNA OPCION");
+		System.out.println("--------------------");
+		System.out.println("1. BORRAR CLIENTE");
+		System.out.println("2. BUSCAR CLIENTE");
+		System.out.println("3. INSERTAR CLIENTE");
+		System.out.println("4. MOSTRAR CLIENTE");
+		System.out.println("5. MOSTRAR FECHA DEL CLIENTE");
+		System.out.println("6. SALIR");
+		
+	}
 	public Opcion elegirOpcion(int opcion) {
+		
+		opcion=Entrada.entero();
 		switch (opcion) {
 		case 1: {
 			
@@ -19,10 +36,10 @@ public class Consola {
 		case 6:
 			return Opcion.SALIR;
 		default:
-			throw new IllegalArgumentException("Unexpected value: " + null);
-		}
+			throw new IllegalArgumentException("Unexpected value: " + null);}
 		
-		
-	}
+		}	
+	
+
 
 }
