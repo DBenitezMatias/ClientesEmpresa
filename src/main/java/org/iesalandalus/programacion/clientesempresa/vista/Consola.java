@@ -1,5 +1,8 @@
 package org.iesalandalus.programacion.clientesempresa.vista;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.iesalandalus.programacion.clientesempresa.modelo.dominio.Cliente;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
@@ -16,7 +19,7 @@ public class Consola {
 		System.out.println("6. SALIR");
 		
 	}
-	public Opcion elegirOpcion(int opcion) {
+	public static Opcion elegirOpcion(int opcion) {
 		
 		opcion=Entrada.entero();
 		switch (opcion) {
@@ -39,6 +42,61 @@ public class Consola {
 			throw new IllegalArgumentException("Unexpected value: " + null);}
 		
 		}	
+	public static Cliente leerCliente() {
+		String nombre,correo,telefono;
+		LocalDate fechaNacimiento;
+		
+			System.out.println("Introduce nombre");
+			nombre=Entrada.cadena();
+			
+			System.out.println("Introduce correo");
+			correo=Entrada.cadena();
+			System.out.println("Introduce telefono");
+			telefono=Entrada.cadena();
+			
+			Consola.leerClienteDni();
+			Consola.leerFechaNacimiento();
+			
+			
+		
+		return null;
+		
+		
+	}
+	
+	
+	
+	public static Cliente leerClienteDni() {
+		String dni=null;
+		do {System.out.println("Introduce dni");
+		dni=Entrada.cadena();
+			
+		} while (dni.length()<8||1>dni.length());
+			System.out.println("Introduce Dni");
+			
+			
+			 
+			
+		
+		return null;
+	}
+	
+	
+	
+	public static LocalDate leerFechaNacimiento() {
+		LocalDate fecha=null;
+		do {
+			System.out.println("Introduce la fecha en DD/MM/YYYY  ");
+			try {
+				fecha=LocalDate.parse(Entrada.cadena(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			} catch (IllegalArgumentException e) {
+				fecha=null;
+				System.out.println("Formato de fecha incorrecto");
+			}
+		} while (fecha==null);
+		return null;
+		
+	}
 	
 
 
