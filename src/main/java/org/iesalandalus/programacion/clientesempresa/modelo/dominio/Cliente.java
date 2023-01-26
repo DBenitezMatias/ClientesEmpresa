@@ -8,11 +8,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.*;
 public class Cliente {
-	private static final String ER_CORREO = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-	private static final String ER_DNI = "([0-9]{8})([a-zA-Z])";
-	private static final String ER_TELEFONO = "(9|6)[0-9]{8}";
+	
+	
+	private static final String ER_CORREO =  "[^@]+@[^@]+\\.[a-zA-Z]{2,}";
+	private static final String ER_DNI = "(([0-9]{8})([A-Z|a-z]))";
+	static final String ER_TELEFONO = "(9|6)[0-9]{8}";
 	public static final String ER_FORMATO_FECHA = "dd/MM/yyyy";
+	
+	
 	private String nombre;
 	private String dni;
 	private String correo;
@@ -25,11 +28,11 @@ public class Cliente {
 			 throw new NullPointerException("ERROR: No es posible copiar un cliente nulo.");
 		}
 		
-		setNombre(cliente.getNombre());
-		setDni(cliente.getDni());
-		setCorreo(cliente.getCorreo());
-		setTelefono(cliente.getTelefono());
-		setFechaNacimiento(cliente.getFechaNacimiento());
+		this.nombre = cliente.getNombre();
+		this.dni = cliente.getDni();
+		this.correo = cliente.getCorreo();
+		this.telefono = cliente.getTelefono();
+		this.fechaNacimiento = cliente.getFechaNacimiento();
 		
 	}
 	//constructor con parametros
@@ -42,44 +45,64 @@ public class Cliente {
 		
 	}
 	//metodo comprobarLetraDni
-	public boolean comprobarLetraDni(String dni) {
-
-		char tempLetraDNI = dni.charAt(dni.length() - 1);
-		
-		String dniFixed = dni.replaceAll("\\D", "");
-		int dniNumber = Integer.parseInt(dniFixed);
-
-		char[] LETRAS_DNI = { 'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V','H', 'L', 'C', 'K', 'E' };
-		//segun el resto dividido de 23 podremos verificar las letras que se guardan en el array
-
-		if (LETRAS_DNI[dniNumber % 23] == tempLetraDNI) {
-			return true;
-		} else
-			return false;
+	public static boolean comprobarLetraDni(String dni) {
+	    // Eliminar cualquier espacio en blanco al principio o al final del DNI
+	    dni = dni.trim();
+	    
+	    // El DNI debe tener 9 caracteres
+	    if (dni.length() != 9) {
+	        return false;
+	    }
+	    
+	    // El primer 8 caracteres deben ser dígitos
+	    for (int i = 0; i < 8; i++) {
+	        if (!Character.isDigit(dni.charAt(i))) {
+	            return false;
+	        }
+	    }
+	    
+	    // El último carácter debe ser una letra
+	    if (!Character.isLetter(dni.charAt(8))) {
+	        return false;
+	    }
+	    
+	    // Convertir la letra a mayúsculas
+	    char letter = Character.toUpperCase(dni.charAt(8));
+	    
+	    // Calcular la letra de control
+	    int dniNumber = Integer.parseInt(dni.substring(0, 8));
+	    int remainder = dniNumber % 23;
+	    char[] letters = {'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H', 'L', 'C', 'K', 'E'};
+	    char controlLetter = letters[remainder];
+	    
+	    // Comparar la letra de control con la letra del DNI
+	    if (letter != controlLetter) {
+	        return false;
+	    }
+	    
+	    // Si se ha llegado hasta aquí, el DNI es válido
+	    return true;
 	}
+
 	//metodo formatea nombre ,eliminando espacioes en blanco y pasando todo a minuscula y luego los iniciales a mayuscula
-	public String formateaNombre(String nombre) {
-		Pattern pat = Pattern.compile("[\\w]{1,}", Pattern.UNICODE_CHARACTER_CLASS);
-		Matcher mat = pat.matcher(nombre);
-		String nombreAFormatear = "";
-		while (mat.find()) {
-			nombreAFormatear = nombreAFormatear + mat.group().toLowerCase() + " ";
-		}
-		String[] nombreDividido = nombreAFormatear.split(" ");
-		for (int i = 0; i < nombreDividido.length; i++) {
-			String inicial = nombreDividido[i].substring(0, 1);
-			String restoLetras = nombreDividido[i].substring(1, nombreDividido[i].length());
-			inicial = inicial.toUpperCase();
-			nombreDividido[i] = inicial + restoLetras;
-		}
-		nombreAFormatear = "";
-		for (int i = 0; i < nombreDividido.length; i++) {
-			nombreAFormatear = nombreAFormatear + nombreDividido[i] + " ";
-		}
-		String nombreFormateado = nombreAFormatear.substring(0, nombreAFormatear.length() - 1);
-		return nombreFormateado;
-		
+	public static String formateaNombre(String nombre) {
+	    nombre = nombre.replaceAll("\\s+"," "); // Eliminar espacios en blanco
+	    nombre = nombre.toLowerCase(); // Convertir a minúsculas
+	    String[] parts = nombre.split(" ");
+	    nombre = "";
+	    for (String part : parts) {
+	        nombre += part.substring(0,1).toUpperCase() + part.substring(1) + " ";
+	    }
+	    return nombre.trim();
 	}
+
+	
+	@Override
+	public String toString() {
+		return "Cliente [nombre=" + formateaNombre(nombre) + " " +getIniciales(nombre)+ " "+ ", dni=" + dni + ", correo=" + correo + ", telefono=" + telefono
+				+ ", fechaNacimiento=" + fechaNacimiento + "]";
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -95,18 +118,18 @@ public class Cliente {
 			 throw new NullPointerException("Error : El dni de un cliente no puede ser nulo.");
 		}
 		
-		if(!dni.matches(ER_DNI)) {
+		if(dni.matches(ER_DNI)) {
 			
-			throw new IllegalArgumentException("Error : El dni del cliente no tiene un formato válido.");
+			throw new IllegalArgumentException("Error : El dni del cliente no tiene un formato valido.");
 		}
 		
-		if(comprobarLetraDni(dni) == false) {
+		/*else if(comprobarLetraDni(dni) == false) {
 			
 			throw new IllegalArgumentException("Error: La letra del dni del cliente no es correcta.");
-		}
+		}*/
 		
 		
-		this.dni = dni;
+		else  {this.dni = dni;}
 	}
 	public String getCorreo() {
 		return correo;
@@ -117,19 +140,14 @@ public class Cliente {
 			
 			 throw new NullPointerException("Error : El correo de un cliente no puede ser nulo.");
 		}
-		
-		Pattern pattern = Pattern.compile(ER_CORREO); 
-        Matcher mather = pattern.matcher(correo);
-        
-        if(mather.find() == false) {
-        	
-        	throw new IllegalArgumentException("Error: El correo no es valido.");
-        }
-		
+		else if (correo.matches(ER_CORREO)) {
+		    throw new IllegalArgumentException("Error: El correo no tiene un formato valido.");
+		}else
 		
 		this.correo = correo;
 	}
 	public String getTelefono() {
+		
 		return telefono;
 	}
 	public void setTelefono(String telefono) {
@@ -139,10 +157,10 @@ public class Cliente {
 			 throw new NullPointerException("Error: El teléfono de un cliente no puede ser nulo.");
 		}
 		
-		if(!telefono.matches(ER_TELEFONO)) {
-			
-			throw new IllegalArgumentException("Error : El teléfono del cliente no tiene un formato válido.");
-		}
+		else if(telefono.matches(ER_TELEFONO)) {
+
+			throw new IllegalArgumentException("Error : El teléfono del cliente no tiene un formato valido.");
+		}else
 		
 		
 		this.telefono = telefono;
@@ -153,31 +171,25 @@ public class Cliente {
 		return fechaNacimiento;
 	}
 	
-	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+	public  void setFechaNacimiento(LocalDate fechaNacimiento) {
 		if(fechaNacimiento == null) {
 			
 			 throw new NullPointerException("Error : La fecha de nacimiento de un cliente no puede ser nula.");
 		}
 		
+		
 		this.fechaNacimiento = fechaNacimiento;
 	}
 		
 	//metodo getIniciales haciendo split del nombre por cada espacio y se guarda en un array las subcadenas
-	public String getIniciales() {
-		String iniciales ="";
-		String[] LetraNombreApellidos = nombre.split("/s");
-		for (int i = 0; i < LetraNombreApellidos.length; i++) {
-			String primeraLetra =LetraNombreApellidos[i].substring(0,1);
-			primeraLetra = primeraLetra.toUpperCase();
-			
-			LetraNombreApellidos[i] = LetraNombreApellidos[i] = primeraLetra;
-		}
-		
-		for (int i = 0; i < LetraNombreApellidos.length; i++) {
-			iniciales = iniciales + LetraNombreApellidos[i];
-		}
-		return iniciales;
-		}
+	public static String getIniciales(String name) {
+	    String[] parts = name.split(" ");
+	    String initials = "";
+	    for (String part : parts) {
+	        initials += part.charAt(0);
+	    }
+	    return initials;
+	}
 	
 	@Override
 	public int hashCode() {
