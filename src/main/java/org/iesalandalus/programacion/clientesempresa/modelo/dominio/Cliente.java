@@ -1,6 +1,7 @@
 package org.iesalandalus.programacion.clientesempresa.modelo.dominio;
 
 import java.time.LocalDate;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Objects;
@@ -11,8 +12,8 @@ public class Cliente {
 	
 	
 	private static final String ER_CORREO =  "[^@]+@[^@]+\\.[a-zA-Z]{2,}";
-	private static final String ER_DNI = "(([0-9]{8})([A-Z|a-z]))";
-	static final String ER_TELEFONO = "(9|6)[0-9]{8}";
+	private static final String ER_DNI = "(/^[0-9]+([.][0-9]+)?$/)";
+	static final String ER_TELEFONO = "(\\+34|0034|34)?[ -]*(6|7)[ -]*([0-9][ -]*){8}";
 	public static final String ER_FORMATO_FECHA = "dd/MM/yyyy";
 	
 	
@@ -25,7 +26,7 @@ public class Cliente {
 	public Cliente(Cliente cliente) {
 		if(cliente == null) {
 			
-			 throw new NullPointerException("ERROR: No es posible copiar un cliente nulo.");
+			 throw new NullPointerException("Error : No es posible copiar un cliente nulo.");
 		}
 		
 		this.nombre = cliente.getNombre();
@@ -99,7 +100,7 @@ public class Cliente {
 	
 	@Override
 	public String toString() {
-		return "Cliente [nombre=" + formateaNombre(nombre) + " " +getIniciales(nombre)+ " "+ ", dni=" + dni + ", correo=" + correo + ", telefono=" + telefono
+		return "El Cliente es nombre=" + formateaNombre(nombre) + " " +getIniciales(nombre)+ " "+ ", dni=" + dni + ", correo=" + correo + ", telefono=" + telefono
 				+ ", fechaNacimiento=" + fechaNacimiento + "]";
 	}
 	
@@ -107,6 +108,10 @@ public class Cliente {
 		return nombre;
 	}
 	public void setNombre(String nombre) {
+		if(nombre == null) {
+			
+			 throw new NullPointerException("Error: El nombre de un cliente no debe ser nulo.");
+		}
 		this.nombre = formateaNombre(nombre);
 	}
 	public String getDni() {
@@ -115,19 +120,19 @@ public class Cliente {
 	public void setDni(String dni) {
 		if(dni == null) {
 			
-			 throw new NullPointerException("Error : El dni de un cliente no puede ser nulo.");
+			 throw new NullPointerException("Error : El dni de un cliente no debe ser nulo.");
 		}
 		
 		if(dni.matches(ER_DNI)) {
 			
 			throw new IllegalArgumentException("Error : El dni del cliente no tiene un formato valido.");
 		}
-		
-		/*else if(comprobarLetraDni(dni) == false) {
+		/*
+		else if(comprobarLetraDni(dni) == false) {
 			
-			throw new IllegalArgumentException("Error: La letra del dni del cliente no es correcta.");}
+			throw new IllegalArgumentException("Error: La letra del dni de un cliente no debe ser nulo.");}*/
 		
-		*/
+		
 		
 		else  {this.dni = dni;}
 	}
@@ -138,9 +143,9 @@ public class Cliente {
 		
 		if(correo == null) {
 			
-			 throw new NullPointerException("Error : El correo de un cliente no puede ser nulo.");
+			 throw new NullPointerException("Error : El correo de un cliente no debe ser nulo..");
 		}
-		else if (correo.matches(ER_CORREO)) {
+		else if (correo.matches(ER_CORREO)==false) {
 		    throw new IllegalArgumentException("Error: El correo no tiene un formato valido.");
 		}else
 		
@@ -157,7 +162,7 @@ public class Cliente {
 			 throw new NullPointerException("Error: El teléfono de un cliente no puede ser nulo.");
 		}
 		
-		else if(telefono.matches(ER_TELEFONO)) {
+		else if(telefono.matches(ER_TELEFONO)==false) {
 
 			throw new IllegalArgumentException("Error : El teléfono del cliente no tiene un formato valido.");
 		}else

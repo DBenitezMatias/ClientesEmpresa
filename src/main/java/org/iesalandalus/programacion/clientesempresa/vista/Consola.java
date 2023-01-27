@@ -44,29 +44,51 @@ public class Consola {
 		
 		}	
 	public static Cliente leerCliente() {
-		String nombre,correo,telefono,dni;
-		LocalDate fechaNacimiento;
-		
-			System.out.println("Introduce nombre");
-			nombre=Entrada.cadena();
-			System.out.println("Introduce correo electronico");
-			correo=Entrada.cadena();
-			System.out.println("Introduce telefono");
-			telefono=Entrada.cadena(); 
-			dni=leerDni();			
-			fechaNacimiento=leerFechaNacimiento();
+		String nombre, dni, correo = null, telefono;
+		LocalDate fechaNacimiento = null;
+		Cliente cliente = null;
+		boolean fallo;
+		do {
+			System.out.println("-------------------------");
 			
-			Cliente  cliente=new Cliente(nombre,correo,telefono,dni,fechaNacimiento);
-			return cliente;
-		
 			
+			fallo = false;
+
+			System.out.println("Introduce el nombre:");
+			nombre = Entrada.cadena();
+
+			System.out.println("Introduce el dni:");
+			dni = Entrada.cadena();
+
+			System.out.println("Introduce el correo:");
+			correo = Entrada.cadena();
+
+			System.out.println("Introduce el telefono:");
+			telefono = Entrada.cadena();
+			
+			fechaNacimiento = leerFechaNacimiento();
+
+			try {
+				cliente = new Cliente(nombre, dni, correo, telefono, fechaNacimiento);
+
+			} catch (NullPointerException | IllegalArgumentException e) {
+				System.out.println(e.getMessage());
+				fallo = true;
+				
+				
+				
 			}
+		} while (fallo);
+		return cliente;
+	}
+			
+
+			
+			
 	public static String leerDni() {
 		String dni;
 		System.out.println("Introduce dni");
 		dni = Entrada.cadena();
-		
-		
 		
 		return dni;
 		
@@ -77,7 +99,7 @@ public class Consola {
 		
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         
-        System.out.print("Ingrese la fecha del cliente (DD/MM/YYYY): ");
+        System.out.print("Ingrese la fecha con el siguiente formato: (DD/MM/YYYY): ");
         String date = Entrada.cadena();
         try {
             return LocalDate.parse(date, dateFormat);

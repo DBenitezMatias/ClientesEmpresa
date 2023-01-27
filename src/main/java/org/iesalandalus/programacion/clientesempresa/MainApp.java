@@ -53,7 +53,7 @@ public class MainApp {
 		try {
 			clientes.insertar(cliente);
 		} catch (IllegalArgumentException e) {
-			System.out.println();
+			System.out.println("");
 		}
 	}
 
