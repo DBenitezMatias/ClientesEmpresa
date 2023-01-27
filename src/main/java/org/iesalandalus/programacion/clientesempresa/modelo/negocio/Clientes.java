@@ -141,7 +141,7 @@ public class Clientes {
 	
 
 	
-
+//
 	public void borrar(Cliente cliente) throws OperationNotSupportedException {
 
 		if (cliente == null) {
