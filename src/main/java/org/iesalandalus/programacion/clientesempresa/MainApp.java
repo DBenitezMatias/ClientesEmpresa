@@ -21,7 +21,8 @@ public class MainApp {
 			System.out.println("");
 			ejecutarOpcion(opcion);
 		} while (opcion != Opcion.SALIR);
-		System.out.println("Saliendo...");
+		System.out.println("-------------------");
+		System.out.println("Saliendo del programa");
 	}
 
 	private static void ejecutarOpcion(Opcion opcion) throws OperationNotSupportedException {

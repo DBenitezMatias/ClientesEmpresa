@@ -107,7 +107,7 @@ public class Cliente {
 		return nombre;
 	}
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombre = formateaNombre(nombre);
 	}
 	public String getDni() {
 		return dni;
@@ -123,11 +123,11 @@ public class Cliente {
 			throw new IllegalArgumentException("Error : El dni del cliente no tiene un formato valido.");
 		}
 		
-		else if(comprobarLetraDni(dni) == false) {
+		/*else if(comprobarLetraDni(dni) == false) {
 			
 			throw new IllegalArgumentException("Error: La letra del dni del cliente no es correcta.");}
 		
-		
+		*/
 		
 		else  {this.dni = dni;}
 	}
