@@ -1,5 +1,6 @@
 package org.iesalandalus.programacion.clientesempresa.vista;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -7,7 +8,7 @@ import org.iesalandalus.programacion.clientesempresa.modelo.dominio.Cliente;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
 public class Consola {
-	public void mostrarMenu() {
+	public static void mostrarMenu() {
 		
 		System.out.println("ELIGE UNA OPCION");
 		System.out.println("--------------------");
@@ -43,60 +44,54 @@ public class Consola {
 		
 		}	
 	public static Cliente leerCliente() {
-		String nombre,correo,telefono;
+		String nombre,correo,telefono,dni;
 		LocalDate fechaNacimiento;
 		
 			System.out.println("Introduce nombre");
 			nombre=Entrada.cadena();
-			
-			System.out.println("Introduce correo");
+			System.out.println("Introduce correo electronico");
 			correo=Entrada.cadena();
 			System.out.println("Introduce telefono");
-			telefono=Entrada.cadena();
+			telefono=Entrada.cadena(); 
+			dni=leerDni();			
+			fechaNacimiento=leerFechaNacimiento();
 			
-			Consola.leerClienteDni();
-			Consola.leerFechaNacimiento();
-			
-			
+			Cliente  cliente=new Cliente(nombre,correo,telefono,dni,fechaNacimiento);
+			return cliente;
 		
-		return null;
+			
+			}
+	public static String leerDni() {
+		String dni;
+		System.out.println("Introduce dni");
+		dni = Entrada.cadena();
+		
+		
+		
+		return dni;
 		
 		
 	}
-	
-	
-	
-	public static Cliente leerClienteDni() {
-		String dni=null;
-		do {System.out.println("Introduce dni");
-		dni=Entrada.cadena();
-			
-		} while (dni.length()<8||1>dni.length());
-			System.out.println("Introduce Dni");
-			
-			
-			 
-			
-		
-		return null;
-	}
-	
-	
 	
 	public static LocalDate leerFechaNacimiento() {
-		LocalDate fecha=null;
-		do {
-			System.out.println("Introduce la fecha en DD/MM/YYYY  ");
-			try {
-				fecha=LocalDate.parse(Entrada.cadena(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-			} catch (IllegalArgumentException e) {
-				fecha=null;
-				System.out.println("Formato de fecha incorrecto");
-			}
-		} while (fecha==null);
-		return null;
 		
-	}
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        System.out.print("Ingrese la fecha del cliente (DD/MM/YYYY): ");
+        String date = Entrada.cadena();
+        try {
+            return LocalDate.parse(date, dateFormat);
+        } catch (Exception e) {
+            System.out.println("La fecha ingresada no es valida.");
+            return null;
+        }
+    }
+
+			
+		
+		
+	
+			
 	
 
 
